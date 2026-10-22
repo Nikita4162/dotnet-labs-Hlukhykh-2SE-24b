@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace Pz2_.Net
 {
-    // 1. Власний клас винятку
     public class InvalidEmployeeDataException : Exception
     {
         public InvalidEmployeeDataException() { }
@@ -11,13 +10,11 @@ namespace Pz2_.Net
         public InvalidEmployeeDataException(string message, Exception inner) : base(message, inner) { }
     }
 
-    // 2. Базовий абстрактний клас, що реалізує IComparable
     public abstract class Employee : IComparable<Employee>
     {
         private string name = string.Empty;
         private decimal baseSalary;
 
-        // Інкапсуляція з валідацією
         public string Name
         {
             get => name;
@@ -46,7 +43,6 @@ namespace Pz2_.Net
             BaseSalary = baseSalary;
         }
 
-        // Абстрактний метод для поліморфізму
         public abstract decimal CalculateSalary();
 
         public virtual void PrintInfo()
@@ -54,7 +50,6 @@ namespace Pz2_.Net
             Console.Write($"[{this.GetType().Name}] {Name} | Базова ставка: {BaseSalary:C} | До сплати: {CalculateSalary():C}");
         }
 
-        // Реалізація інтерфейсу для сортування за зарплатою
         public int CompareTo(Employee? other)
         {
             if (other == null) return 1;
@@ -62,7 +57,6 @@ namespace Pz2_.Net
         }
     }
 
-    // 3. Похідний клас 1
     public class Developer : Employee
     {
         private int linesOfCode;
@@ -83,7 +77,6 @@ namespace Pz2_.Net
             LinesOfCode = linesOfCode;
         }
 
-        // Перевизначення методу розрахунку зарплати (ставка + бонус за код)
         public override decimal CalculateSalary()
         {
             return BaseSalary + (LinesOfCode * 0.5m);
@@ -96,7 +89,6 @@ namespace Pz2_.Net
         }
     }
 
-    // 4. Похідний клас 2
     public class Manager : Employee
     {
         private decimal bonus;
@@ -117,7 +109,6 @@ namespace Pz2_.Net
             Bonus = bonus;
         }
 
-        // Перевизначення методу розрахунку зарплати (ставка + фіксований бонус)
         public override decimal CalculateSalary()
         {
             return BaseSalary + Bonus;
@@ -130,7 +121,6 @@ namespace Pz2_.Net
         }
     }
 
-    // 5. Головний клас програми
     class Program
     {
         static void Main()
@@ -138,7 +128,6 @@ namespace Pz2_.Net
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             Console.InputEncoding = System.Text.Encoding.UTF8;
 
-            // Колекція, попередньо заповнена даними
             List<Employee> employees = new List<Employee>
             {
                 new Developer("Олександр", 25000, 1500),
@@ -190,7 +179,6 @@ namespace Pz2_.Net
             Console.WriteLine("\nСписок співробітників:");
             foreach (var emp in employees)
             {
-                // Демонстрація поліморфізму
                 emp.PrintInfo();
             }
         }
@@ -214,7 +202,7 @@ namespace Pz2_.Net
                 employees.Add(dev);
                 Console.WriteLine("Розробника успішно додано!");
             }
-            catch (InvalidEmployeeDataException ex) // Обробка власного винятку
+            catch (InvalidEmployeeDataException ex)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Помилка даних: {ex.Message}");
